@@ -1,0 +1,41 @@
+{
+  "name": "s-salt-pepper",
+  "version": "0.0.0",
+  "description": "Password hashing (via pbkdf2) with salt and pepper",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sebastiansandqvist/s-salt-pepper.git"
+  },
+  "keywords": [
+    "password",
+    "hash",
+    "salt",
+    "pepper",
+    "random",
+    "iterations",
+    "pbkdf2",
+    "javascript",
+    "node"
+  ],
+  "author": "sebastian sandqvist",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sebastiansandqvist/s-salt-pepper/issues"
+  },
+  "homepage": "https://github.com/sebastiansandqvist/s-salt-pepper",
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.10.0",
+    "gulp-mocha": "^2.0.1",
+    "jshint-stylish": "^1.0.1",
+    "mocha": "^2.2.4"
+  }
+}
