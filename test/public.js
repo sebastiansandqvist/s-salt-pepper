@@ -183,7 +183,7 @@ describe('hash', function() {
 		password.iterations = [12000, 15000];
 		password.unencryptedSaltMinLength = null;
 		password.hash('foo', function(err, salt, hash) {
-			expect(err.message).to.include('must be a number >= 0');
+			expect(err.message).exist;
 			expect(salt).to.not.exist;
 			expect(hash).to.not.exist;
 			done()

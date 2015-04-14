@@ -1,5 +1,4 @@
-# s-salt-pepper 
-## Work in progress
+# s-salt-pepper
 [![NPM version](https://img.shields.io/npm/v/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Dependencies](https://img.shields.io/david/sebastiansandqvist/s-salt-pepper.svg) [![build status](http://img.shields.io/travis/sebastiansandqvist/s-salt-pepper.svg)](https://travis-ci.org/sebastiansandqvist/s-salt-pepper) [![NPM license](https://img.shields.io/npm/l/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper)
 
 ## Password hashing and comparison
@@ -17,6 +16,13 @@ Generate a password hash with a salt when a user signs up:
 ```javascript
 var password = require('s-salt-pepper');
 
+// configure once
+password.configure({
+	key: 'my secret key',
+	iterations: [12000, 13000]
+});
+
+// hash a string ('foo'), save returned salt and hash
 password.hash('foo', function(err, salt, hash) {
 	// in this example, save salt/hash to a user
 	user.salt = salt;
@@ -33,10 +39,11 @@ password.compare('foo', user.salt, function(err, hash) {
 ```
 
 ## About
-S-salt-pepper is based on [https://github.com/tj/node-pwd](node-pwd) and usage is almost identical. This improves upon node-pwd by also randomizing the number of iterations of pbkdf2 to run. The number of iterations is concatenated to the salt, then the salt is encrypted with AES256.
+S-salt-pepper is based on [node-pwd](https://github.com/tj/node-pwd) and usage is almost identical. This improves upon node-pwd by also randomizing the number of iterations of pbkdf2 to run. The number of iterations is concatenated to the salt, then the salt is encrypted with AES256 (using the `key` set in `password.configure`).
 
 ## Config
 **Important: you must set your own encryption key. Do not leave this to the default.**
+
 The following are the most common options to change:
 ```javascript
 password.configure({
@@ -47,10 +54,12 @@ password.configure({
 In the iterations array, `iterations[0]` is the minimum number of iterations of pbkdf2 to run, and `iterations[1]` is the maximum number. The actual number of iterations will vary randomly between those values per-user. If the hashing function is running too quickly, you can make it more secure by increasing the number of iterations in the range. Note that the range should not differ too significantly, or some users will be able to authenticate very quickly while others will not.
 
 You can also change the hashLength (note: this is before base64 conversion, so it will be about 3/4 of the final length) and the salt length before it is concatenated to the iteration count and encrypted. Increasing these will increase the time it takes to hash and compare passwords.
-```password.configure({
+```javascript
+password.configure({
 	hashLength: 128,
 	unencryptedSaltMinLength: 32
 });
+```
 
 ## License
 Copyright (c) 2015, Sebastian Sandqvist <s.github@sparque.me>
