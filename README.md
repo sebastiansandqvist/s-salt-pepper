@@ -5,6 +5,9 @@
 #### With salt and variable iterations of pbkdf2
 * **Dependency-free**
 * **Tested on node & iojs**
+* **100% test coverage (`npm test`)**
+	* Run `npm run coverage`
+	* See etc/coverage.html
 
 ## Installation
 ```bash
