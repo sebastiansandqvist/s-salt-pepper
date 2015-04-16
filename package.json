@@ -1,6 +1,6 @@
 {
   "name": "s-salt-pepper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Password hashing (via pbkdf2) with salt and pepper",
   "main": "index.js",
   "engines": {
