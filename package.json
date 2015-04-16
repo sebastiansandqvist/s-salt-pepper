@@ -1,6 +1,6 @@
 {
   "name": "s-salt-pepper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Password hashing (via pbkdf2) with salt and pepper",
   "main": "index.js",
   "engines": {
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "coverage": "mocha --require blanket -R html-cov > etc/coverage.html"
+    "coverage": "mocha --require blanket --reporter mocha-lcov-reporter > etc/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -37,10 +37,12 @@
   "devDependencies": {
     "blanket": "^1.1.6",
     "chai": "^2.2.0",
+    "codeclimate-test-reporter": "0.0.4",
     "gulp": "^3.8.11",
     "gulp-jshint": "^1.10.0",
     "gulp-mocha": "^2.0.1",
     "jshint-stylish": "^1.0.1",
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "mocha-lcov-reporter": "0.0.2"
   }
 }

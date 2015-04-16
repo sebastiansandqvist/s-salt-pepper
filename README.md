@@ -47,16 +47,16 @@ S-salt-pepper is based on [node-pwd](https://github.com/tj/node-pwd) and usage i
 ## Config
 **Important: you must set your own encryption key. Do not leave this to the default.**
 
-The following are the most common options to change:
+The following are the most important options to change:
 ```javascript
 password.configure({
 	key: 'MY ENCRYPTION KEY', // can include symbols
 	iterations: [12000, 15000] // range of values for pbkdf2 iterations
 });
 ```
-In the iterations array, `iterations[0]` is the minimum number of iterations of pbkdf2 to run, and `iterations[1]` is the maximum number. The actual number of iterations will vary randomly between those values per-user. If the hashing function is running too quickly, you can make it more secure by increasing the number of iterations in the range. Note that the range should not differ too significantly, or some users will be able to authenticate very quickly while others will not.
+In the iterations array, `iterations[0]` is the minimum number of iterations of pbkdf2 to run, and `iterations[1]` is the maximum number. The actual number of iterations will vary randomly between those values per-user. If the hashing function is running too quickly, you can make it more secure by increasing the minimum and maximum number of iterations in the range. Note that the range should not differ too significantly, or some users will be able to authenticate very quickly while others will not.
 
-You can also change the hashLength (note: this is before base64 conversion, so it will be about 3/4 of the final length) and the salt length before it is concatenated to the iteration count and encrypted. Increasing these will increase the time it takes to hash and compare passwords.
+You can also change the length of the hash `hashLength` (note: this is before base64 conversion, so the value you set will be about 3/4 of the final length) and the salt length before it is concatenated to the iteration count and encrypted. Increasing these will increase the time it takes to hash and compare passwords.
 ```javascript
 password.configure({
 	hashLength: 128,
