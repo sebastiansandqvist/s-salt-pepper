@@ -1,13 +1,10 @@
 # s-salt-pepper
-[![NPM version](https://img.shields.io/npm/v/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Dependencies](https://img.shields.io/david/sebastiansandqvist/s-salt-pepper.svg) [![build status](http://img.shields.io/travis/sebastiansandqvist/s-salt-pepper.svg)](https://travis-ci.org/sebastiansandqvist/s-salt-pepper) [![NPM license](https://img.shields.io/npm/l/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Stability](https://img.shields.io/badge/stability-stable-green.svg)
+[![NPM version](https://img.shields.io/npm/v/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Dependencies](https://img.shields.io/david/sebastiansandqvist/s-salt-pepper.svg) [![build status](http://img.shields.io/travis/sebastiansandqvist/s-salt-pepper.svg)](https://travis-ci.org/sebastiansandqvist/s-salt-pepper) [![NPM license](https://img.shields.io/npm/l/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Stability](https://img.shields.io/badge/stability-stable-green.svg) [![Test Coverage](https://codeclimate.com/github/sebastiansandqvist/s-valid/badges/coverage.svg)](https://codeclimate.com/github/sebastiansandqvist/s-valid)
 
 ## Password hashing and comparison
 #### With salt and variable iterations of pbkdf2
 * **Dependency-free**
 * **Tested on node & iojs**
-* **100% test coverage (`npm test`)**
-	* Run `npm run coverage`
-	* See etc/coverage.html
 
 ## Installation
 ```bash
