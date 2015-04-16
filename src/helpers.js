@@ -79,11 +79,9 @@ helpers._random = function(min, max, fn) {
 // ---------------------------------------
 helpers._salt = function(iterations, len, fn) {
 
-	crypto.randomBytes(len, function(err, randomBytes) {
+	try {
 
-		if (err) {
-			return fn(err)
-		}
+		var randomBytes = crypto.randomBytes(len);
 
 		var salt = randomBytes
 			.toString('base64')
@@ -91,7 +89,10 @@ helpers._salt = function(iterations, len, fn) {
 
 		return fn(null, salt);
 
-	});
+	}
+	catch(e) {
+		return fn(e);
+	}
 
 };
 

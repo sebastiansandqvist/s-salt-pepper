@@ -75,44 +75,31 @@ password.hash = function(input, fn) {
 			return fn(err);
 		}
 
-		try {
+		helpers._salt(iterations, password.unencryptedSaltMinLength, function(err, unencryptedSalt) {
 
-			helpers._salt(iterations, password.unencryptedSaltMinLength, function(err, unencryptedSalt) {
+			if (err) {
+				return fn(err);
+			}
 
-				if (err) {
-					return fn(err);
-				}
+			try {
+				var salt = helpers._encrypt('aes256', password.key, unencryptedSalt);
+			}
+			catch(e) {
+				return fn(e);
+			}
 
-				try {
-					var salt = helpers._encrypt('aes256', password.key, unencryptedSalt);
-				}
-				catch(e) {
-					return fn(e);
-				}
+			try {
 
-				try {
+				var hash = crypto.pbkdf2Sync(input, salt, iterations, password.hashLength)
 
-					crypto.pbkdf2(input, salt, iterations, password.hashLength, function(err, hash) {
+				return fn(null, salt, hash.toString('base64'));
 
-						if (err) {
-							return fn(err);
-						}
+			}
+			catch(e) {
+				return fn(e);
+			}
 
-						return fn(null, salt, hash.toString('base64'));
-
-					}); // end pbkdf2
-
-				}
-				catch(e) {
-					return fn(e);
-				}
-
-			}); // end _salt
-
-		} // end try
-		catch(e) {
-			return fn(e);
-		}
+		}); // end _salt
 
 	}); // end _random
 
@@ -141,26 +128,18 @@ password.compare = function(input, salt, fn) {
 	}
 
 	try {
+
 		var decrypted = helpers._decrypt('aes256', password.key, salt);
 		var iterations = helpers._getIterations(decrypted, password.unencryptedSaltMinLength);
+		
 		if (isNaN(iterations)) {
 			return fn(new Error('could not get hash iterations'));
 		}
-	}
-	catch(e) {
-		return fn(e);
-	}
+		
+		var hash = crypto.pbkdf2Sync(input, salt, iterations, password.hashLength)
 
-	try {
-		crypto.pbkdf2(input, salt, iterations, password.hashLength, function(err, hash) {
+		return fn(null, hash.toString('base64'));
 
-			if (err) {
-				return fn(err);
-			}
-
-			return fn(null, hash.toString('base64'));
-
-		});
 	}
 	catch(e) {
 		return fn(e);

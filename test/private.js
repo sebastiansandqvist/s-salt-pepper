@@ -1,5 +1,11 @@
 // ----- dependencies
 // ---------------------------------------
+require('blanket')({
+	pattern: function (filename) {
+		return !/node_modules/.test(filename);
+	}
+});
+
 var expect = require('chai').expect;
 var helpers = require('../src/helpers.js');
 var password = require('../index.js');
@@ -74,6 +80,22 @@ describe('_salt', function() {
 		helpers._salt(12345, password.unencryptedSaltMinLength, function(err, salt) {
 			expect(err).to.be.null;
 			expect(salt).to.include('12345');
+			done();
+		});
+	});
+
+	it('should return an error if length too long for randomBytes', function(done) {
+		helpers._salt(1000, 999999999999999999999999999999999, function(err, salt) {
+			expect(err).to.exist;
+			expect(salt).to.not.exist;
+			done();
+		});
+	});
+
+	it('should return an error if passed a string', function(done) {
+		helpers._salt(1000, '', function(err, salt) {
+			expect(err).to.exist;
+			expect(salt).to.not.exist;
 			done();
 		});
 	});
