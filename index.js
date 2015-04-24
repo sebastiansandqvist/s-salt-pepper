@@ -3,7 +3,6 @@
 // ----- dependencies
 // ---------------------------------------
 var crypto = require('crypto');
-var helpers = require('./src/helpers.js');
 
 
 // ----- exported object
@@ -16,11 +15,12 @@ var password = {};
 password.defaults = {
 	// ~ three fourths of actual hashLength
 	// (see: http://stackoverflow.com/questions/13378815/base64-length-calculation)
-	hashLength: 128, 
-	iterations: [12000, 15000],
-	key: 'ENCRYPTION KEY',
-	unencryptedSaltMinLength: 32
+	hashLength: 256, 
+	saltLength: 128,
+	iterations: 15000,
+	pepper: 'THIS SHOULD BE RANDOM AND KEPT SECRET'
 };
+
 
 // helper...
 var toStr = Object.prototype.toString;
@@ -69,39 +69,22 @@ password.hash = function(input, fn) {
 		throw(new TypeError('hash method takes two parameters: input and callback'));
 	}
 
-	helpers._random(password.iterations[0], password.iterations[1], function(err, iterations) {
+	try {
+		var salt = crypto.randomBytes(password.saltLength).toString('base64');
+	}
+	catch(e) {
+		return fn(e);
+	}
 
-		if (err) {
-			return fn(err);
-		}
+	var peppered = password.pepper + salt;
 
-		helpers._salt(iterations, password.unencryptedSaltMinLength, function(err, unencryptedSalt) {
-
-			if (err) {
-				return fn(err);
-			}
-
-			try {
-				var salt = helpers._encrypt('aes256', password.key, unencryptedSalt);
-			}
-			catch(e) {
-				return fn(e);
-			}
-
-			try {
-
-				var hash = crypto.pbkdf2Sync(input, salt, iterations, password.hashLength)
-
-				return fn(null, salt, hash.toString('base64'));
-
-			}
-			catch(e) {
-				return fn(e);
-			}
-
-		}); // end _salt
-
-	}); // end _random
+	try {
+		var hash = crypto.pbkdf2Sync(input, peppered, password.iterations, password.hashLength);
+		return fn(null, salt, hash.toString('base64'));
+	}
+	catch(e) {
+		return fn(e);
+	}
 
 }; // end hash
 
@@ -128,18 +111,9 @@ password.compare = function(input, salt, fn) {
 	}
 
 	try {
-
-		var decrypted = helpers._decrypt('aes256', password.key, salt);
-		var iterations = helpers._getIterations(decrypted, password.unencryptedSaltMinLength);
-		
-		if (isNaN(iterations)) {
-			return fn(new Error('could not get hash iterations'));
-		}
-		
-		var hash = crypto.pbkdf2Sync(input, salt, iterations, password.hashLength)
-
+		salt = password.pepper + salt;
+		var hash = crypto.pbkdf2Sync(input, salt, password.iterations, password.hashLength);
 		return fn(null, hash.toString('base64'));
-
 	}
 	catch(e) {
 		return fn(e);

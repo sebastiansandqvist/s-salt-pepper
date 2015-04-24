@@ -18,13 +18,14 @@ var password = require('s-salt-pepper');
 
 // configure once
 password.configure({
-	key: 'my secret key',
-	iterations: [12000, 13000]
+	pepper: 'your random string goes here'
 });
 
-// hash a string ('foo'), save returned salt and hash
+// hash a string 'foo' and save returned salt and hash to (fake) user
 password.hash('foo', function(err, salt, hash) {
-	// in this example, save salt/hash to a user
+	if (err) {
+		// handle error
+	}
 	user.salt = salt;
 	user.hash = hash;
 });
@@ -32,34 +33,28 @@ password.hash('foo', function(err, salt, hash) {
 Compare hashes when user logs in:
 ```javascript
 password.compare('foo', user.salt, function(err, hash) {
-	if(user.hash === hash) {
+	if (user.hash === hash) {
 		// it worked, password 'foo' was correct
 	}
 });
 ```
 
 ## About
-S-salt-pepper is based on [node-pwd](https://github.com/tj/node-pwd) and usage is almost identical. This improves upon node-pwd by also randomizing the number of iterations of pbkdf2 to run. The number of iterations is concatenated to the salt, then the salt is encrypted with AES256 (using the `key` set in `password.configure`).
+S-salt-pepper is based on [node-pwd](https://github.com/tj/node-pwd) and usage is almost identical. This is more secure in the case that the database is compromised, but not the server, as part of the salt (the pepper) is saved on the server.
 
 ## Config
-**Important: you must set your own encryption key. Do not leave this to the default.**
+**Important: you must set your own pepper. Do not leave this to the default.**
 
-The following are the most important options to change:
+The following can be configured:
 ```javascript
 password.configure({
-	key: 'MY ENCRYPTION KEY', // can include symbols
-	iterations: [12000, 15000] // range of values for pbkdf2 iterations
+	hashLength: 256, // bytes of pbkdf2 hash
+	saltLength: 128, // number of random bytes for salt
+	pepper: 'something secret' // your unique pepper, to be concatenated with salt when comparing passwords
 });
 ```
-In the iterations array, `iterations[0]` is the minimum number of iterations of pbkdf2 to run, and `iterations[1]` is the maximum number. The actual number of iterations will vary randomly between those values per-user. If the hashing function is running too quickly, you can make it more secure by increasing the minimum and maximum number of iterations in the range. Note that the range should not differ too significantly, or some users will be able to authenticate very quickly while others will not.
 
-You can also change the length of the hash `hashLength` (note: this is before base64 conversion, so the value you set will be about 3/4 of the final length) and the salt length before it is concatenated to the iteration count and encrypted. Increasing these will increase the time it takes to hash and compare passwords.
-```javascript
-password.configure({
-	hashLength: 128,
-	unencryptedSaltMinLength: 32
-});
-```
+You can configure the length of the final hash and salt `hashlength` and `saltLength` in bytes (before base64 conversion, roughly 3/4 of final length). The pepper is concatenated to to the salt then hashed.
 
 ## License
 Copyright (c) 2015, Sebastian Sandqvist <s.github@sparque.me>
