@@ -71,14 +71,7 @@ password.hash = function(input, fn) {
 
 	try {
 		var salt = crypto.randomBytes(password.saltLength).toString('base64');
-	}
-	catch(e) {
-		return fn(e);
-	}
-
-	var peppered = password.pepper + salt;
-
-	try {
+		var peppered = password.pepper + salt;
 		var hash = crypto.pbkdf2Sync(input, peppered, password.iterations, password.hashLength);
 		return fn(null, salt, hash.toString('base64'));
 	}
