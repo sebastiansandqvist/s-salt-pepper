@@ -1,6 +1,6 @@
 {
   "name": "s-salt-pepper",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Password hashing (via pbkdf2) with salt and pepper",
   "main": "index.js",
   "engines": {
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/sebastiansandqvist/s-salt-pepper",
   "devDependencies": {
-    "blanket": "^1.1.6",
+    "blanket": "1.1.6",
     "chai": "^2.2.0",
     "codeclimate-test-reporter": "0.0.4",
     "gulp": "^3.8.11",
