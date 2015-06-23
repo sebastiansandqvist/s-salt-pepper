@@ -23,8 +23,10 @@ password.defaults = {
 
 
 // helper...
-var toStr = Object.prototype.toString;
-
+function type(input) {
+	var type = Object.prototype.toString.call(input);
+	return type.replace('[object ', '').replace(']', '');
+}
 
 // ----- allow user to set config options
 //		--	but restrict them to props in `password.defaults`
@@ -34,8 +36,8 @@ password.configure = function(obj) {
 
 	for (var prop in obj) {
 		if (obj.hasOwnProperty(prop) && password.defaults.hasOwnProperty(prop)) {
-			if (toStr.call(obj[prop]) !== toStr.call(password.defaults[prop])) {
-				throw(new Error(prop + ' must be of type ' + typeof password.defaults[prop]));
+			if (type(obj[prop]) !== type(password.defaults[prop])) {
+				throw(new Error(prop + ' must be of type ' + type(password.defaults[prop])));
 			}
 			password[prop] = obj[prop];
 		}
@@ -61,11 +63,11 @@ password.configure(password.defaults);
 password.hash = function(input, fn) {
 
 
-	if (toStr.call(input) !== '[object String]' || !input && toStr.call(fn) === '[object Function]') {
+	if (type(input) !== 'String' || !input && type(fn) === 'Function') {
 		return fn(new TypeError('invalid input for hash method'));
 	}
 
-	if (toStr.call(fn) !== '[object Function]' || toStr.call(input) !== '[object String]' || arguments.length !== 2) {
+	if (type(fn) !== 'Function' || type(input) !== 'String' || arguments.length !== 2) {
 		throw(new TypeError('hash method takes two parameters: input and callback'));
 	}
 
@@ -91,15 +93,15 @@ password.hash = function(input, fn) {
 // ---------------------------------------
 password.compare = function(input, salt, fn) {
 
-	if (toStr.call(input) !== '[object String]' || !input && toStr.call(fn) === '[object Function]') {
+	if (type(input) !== 'String' || !input && type(fn) === 'Function') {
 		return fn(new TypeError('invalid input for compare method'));
 	}
 
-	if (toStr.call(salt) !== '[object String]' || !salt && toStr.call(fn) === '[object Function]') {
+	if (type(salt) !== 'String' || !salt && type(fn) === 'Function') {
 		return fn(new TypeError('invalid salt for compare method'));
 	}
 
-	if (toStr.call(fn) !== '[object Function]' || toStr.call(input) !== '[object String]' || toStr.call(salt) !== '[object String]' || arguments.length !== 3) {
+	if (type(fn) !== 'Function' || type(input) !== 'String' || type(salt) !== 'String' || arguments.length !== 3) {
 		throw(new TypeError('compare method takes three parameters: input, salt, and callback'));
 	}
 
