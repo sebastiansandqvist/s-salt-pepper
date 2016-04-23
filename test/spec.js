@@ -163,7 +163,7 @@ describe('hash', function() {
 		password.configure(password.defaults);
 		password.hashLength = null;
 		password.hash('foo', function(err, salt, hash) {
-			expect(err.message).to.include('Key length not a number');
+			expect(err.message).to.include('hashLength is required');
 			expect(salt).to.not.exist;
 			expect(hash).to.not.exist;
 			done();
@@ -241,7 +241,7 @@ describe('compare', function() {
 		password.hash('test', function(err, salt, hash) {
 			password.hashLength = null;
 			password.compare('test', salt, function(err, hash2) {
-				expect(err.message).to.include('length');
+				expect(err.message).to.include('hashLength is required');
 				expect(hash2).to.not.exist;
 				done();
 			});
@@ -274,19 +274,17 @@ describe('using other saltLengths', function() {
 
 describe('using other hashLengths', function() {
 
-	it('should work with a hashLength of 0 (but... this is still bad)', function(done) {
+	it('should not work with a hashLength of 0', function(done) {
 		password.configure(password.defaults);
 		password.configure({
 			hashLength: 0
 		});
 
 		password.hash('test', function(err, salt, hash) {
-			password.compare('test', salt, function(err, hash2) {
-				expect(err).to.not.exist;
-				expect(hash2).to.equal(hash);
-				expect(hash).to.equal('');
-				done();
-			});
+			expect(err.message).to.include('hashLength is required');
+			expect(salt).to.not.exist;
+			expect(hash).to.not.exist;
+			done();
 		});
 	});
 

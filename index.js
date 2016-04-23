@@ -71,15 +71,19 @@ password.hash = function(input, fn) {
 		throw(new TypeError('hash method takes two parameters: input and callback'));
 	}
 
-	try {
-		var salt = crypto.randomBytes(password.saltLength).toString('base64');
+	if (!password.hashLength) {
+		return fn(new TypeError('hashLength is required'));
+	}
+
+	crypto.randomBytes(password.saltLength, function(err, salt) {
+		if (err) { return fn(err); }
+		salt = salt.toString('base64');
 		var peppered = password.pepper + salt;
-		var hash = crypto.pbkdf2Sync(input, peppered, password.iterations, password.hashLength);
-		return fn(null, salt, hash.toString('base64'));
-	}
-	catch(e) {
-		return fn(e);
-	}
+		crypto.pbkdf2(input, peppered, password.iterations, password.hashLength, function(err, hash) {
+			if (err) { return fn(err); }
+			return fn(null, salt, hash.toString('base64'));
+		});
+	});
 
 }; // end hash
 
@@ -104,15 +108,18 @@ password.compare = function(input, salt, fn) {
 	if (type(fn) !== 'Function' || type(input) !== 'String' || type(salt) !== 'String' || arguments.length !== 3) {
 		throw(new TypeError('compare method takes three parameters: input, salt, and callback'));
 	}
+	
+	if (!password.hashLength) {
+		return fn(new TypeError('hashLength is required'));
+	}
 
-	try {
-		salt = password.pepper + salt;
-		var hash = crypto.pbkdf2Sync(input, salt, password.iterations, password.hashLength);
-		return fn(null, hash.toString('base64'));
-	}
-	catch(e) {
-		return fn(e);
-	}
+	salt = password.pepper + salt;
+
+	crypto.pbkdf2(input, salt, password.iterations, password.hashLength, function(err, hash) {
+		if (err) { return fn(err); }
+		return fn(null, hash.toString('base64'));	
+	});
+	
 
 };
 
