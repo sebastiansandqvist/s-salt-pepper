@@ -115,7 +115,7 @@ password.compare = function(input, salt, fn) {
 
 	salt = password.pepper + salt;
 
-	crypto.pbkdf2(input, salt, password.iterations, password.hashLength, function(err, hash) {
+	crypto.pbkdf2(input, salt, password.iterations, password.hashLength, , 'SHA1', function(err, hash) {
 		if (err) { return fn(err); }
 		return fn(null, hash.toString('base64'));	
 	});
