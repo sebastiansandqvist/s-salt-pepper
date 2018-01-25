@@ -2,7 +2,7 @@
 [![NPM version](https://img.shields.io/npm/v/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Dependencies](https://img.shields.io/david/sebastiansandqvist/s-salt-pepper.svg) [![build status](http://img.shields.io/travis/sebastiansandqvist/s-salt-pepper.svg)](https://travis-ci.org/sebastiansandqvist/s-salt-pepper) [![NPM license](https://img.shields.io/npm/l/s-salt-pepper.svg)](https://www.npmjs.com/package/s-salt-pepper) ![Stability](https://img.shields.io/badge/stability-stable-green.svg) [![Test Coverage](https://codeclimate.com/github/sebastiansandqvist/s-salt-pepper/badges/coverage.svg)](https://codeclimate.com/github/sebastiansandqvist/s-salt-pepper)
 
 ## About
-This dependency-free module provides password hashing and comparison with salt and variable iterations of pbkdf2. Additional "pepper" (optional) is concatenated to the salt before hashing. The salts are kept in your database, the pepper is saved on your server.
+This dependency-free module provides password hashing and comparison with salt and variable iterations of pbkdf2. An additional "pepper" (optional) is concatenated to the salt before hashing. The salts are kept in your database, the pepper is saved on your server. Works with node versions 8 and above.
 
 ## Installation
 ```bash

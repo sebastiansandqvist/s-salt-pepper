@@ -4,7 +4,7 @@
   "description": "Password hashing (via pbkdf2) with salt and pepper",
   "main": "index.js",
   "engines": {
-    "node": ">= 4"
+    "node": ">= 8"
   },
   "directories": {
     "test": "test"
