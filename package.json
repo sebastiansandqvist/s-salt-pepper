@@ -29,14 +29,13 @@
     "node"
   ],
   "author": "sebastian sandqvist",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sebastiansandqvist/s-salt-pepper/issues"
   },
   "homepage": "https://github.com/sebastiansandqvist/s-salt-pepper",
   "devDependencies": {
     "ava": "0.24.0",
-    "codeclimate-test-reporter": "0.0.4",
     "nyc": "11.4.1"
   }
 }
