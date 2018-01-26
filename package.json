@@ -6,9 +6,6 @@
   "engines": {
     "node": ">= 8"
   },
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "ava --serial",
     "coverage": "nyc --reporter=lcov --reporter=text ava --serial"
